@@ -5099,12 +5099,30 @@ def init_db():
         print("Database initialized successfully!")
 
 
+_DB_BOOTSTRAPPED = False
+
+
+def _init_db_if_enabled_once():
+    """Initialize database once per process when AUTO_INIT_DB is enabled."""
+    global _DB_BOOTSTRAPPED
+    if _DB_BOOTSTRAPPED:
+        return
+    if not _env_flag('AUTO_INIT_DB', True):
+        return
+    init_db()
+    _DB_BOOTSTRAPPED = True
+
+
+# Ensure schemas are created under WSGI servers (e.g., Gunicorn), where
+# the __main__ block is not executed.
+_init_db_if_enabled_once()
+
+
 # ==================== MAIN ====================
 
 if __name__ == '__main__':
     # Initialize database and create tables
-    if _env_flag('AUTO_INIT_DB', True):
-        init_db()
+    _init_db_if_enabled_once()
 
     # Run the application
     debug_mode = _env_flag('FLASK_DEBUG', default=not IS_PRODUCTION) and not IS_PRODUCTION
