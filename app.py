@@ -288,6 +288,7 @@ PARTNER_TABLE_READY = False
 DOCTOR_SCHEMA_READY = False
 COMMUNICATION_SCHEMA_READY = False
 COMMUNICATION_THREAD_TABLE_READY = False
+SITE_SETTINGS_TABLE_READY = False
 
 # ==================== DATABASE MODELS ====================
 
@@ -847,6 +848,7 @@ def _parse_services_editor_text(editor_text):
 
 
 def _load_site_setting_map():
+    ensure_site_settings()
     rows = SiteSetting.query.all()
     return {row.setting_key: (row.setting_value or '') for row in rows}
 
@@ -4989,6 +4991,13 @@ def ensure_event_schema():
 
 def ensure_site_settings():
     """Ensure default editable site-content keys exist."""
+    global SITE_SETTINGS_TABLE_READY
+    if not SITE_SETTINGS_TABLE_READY:
+        inspector = inspect(db.engine)
+        if 'site_setting' not in inspector.get_table_names():
+            SiteSetting.__table__.create(db.engine, checkfirst=True)
+        SITE_SETTINGS_TABLE_READY = True
+
     existing_keys = {
         row.setting_key for row in SiteSetting.query.with_entities(SiteSetting.setting_key).all()
     }
