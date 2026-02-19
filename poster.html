@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Healthcare Solutions Poster Generator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@400;500;600&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0c2461 0%, #1e3799 100%);
+            color: #fff;
+            padding: 15px;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(255,255,255,0.05) 0%, transparent 20%);
+            z-index: -2;
+        }
+        
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding: 20px 15px;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(5px);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .header h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            background: linear-gradient(to right, #ffffff, #a5b4fc);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .header p {
+            font-size: clamp(1rem, 2vw, 1.2rem);
+            max-width: 900px;
+            margin: 0 auto;
+            color: #e2e8f0;
+            line-height: 1.5;
+        }
+        
+        .controls-panel {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(5px);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            margin-bottom: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .size-selector {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .size-label {
+            font-weight: 600;
+            font-size: 1rem;
+            color: #e2e8f0;
+        }
+        
+        .size-btn {
+            padding: 10px 15px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 1;
+            min-width: 70px;
+            text-align: center;
+        }
+        
+        .size-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .size-btn.active {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+            border: none;
+            box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        .action-btn {
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
+            flex: 1;
+            min-width: 150px;
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(59, 130, 246, 0.4);
+        }
+        
+        .action-btn.secondary {
+            background: linear-gradient(135deg, #10b981, #34d399);
+            box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
+        }
+        
+        .action-btn.secondary:hover {
+            box-shadow: 0 6px 15px rgba(16, 185, 129, 0.4);
+        }
+        
+        .preview-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(3px);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            overflow: auto;
+            max-width: 100%;
+        }
+        
+        /* Poster Styles - Responsive */
+        #poster {
+            width: 595px; /* Default A4 width */
+            height: 842px; /* Default A4 height */
+            background: linear-gradient(145deg, #0f172a 0%, #1e293b 100%);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+            transform-origin: top left;
+            max-width: 100%;
+        }
+        
+        .poster-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.1;
+            z-index: 0;
+            background-image: 
+                url('https://images.unsplash.com/photo-1551601651-2a8555f1a136?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            filter: blur(0.5px);
+        }
+        
+        .poster-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.92) 100%);
+            z-index: 1;
+        }
+        
+        .poster-content {
+            position: relative;
+            z-index: 2;
+            padding: 30px 40px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .poster-header {
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        
+        .poster-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: clamp(2rem, 4vw, 2.8rem);
+            background: linear-gradient(to right, #60a5fa, #a78bfa);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            line-height: 1.1;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+        }
+        
+        .poster-subtitle {
+            font-size: clamp(1.4rem, 3vw, 1.8rem);
+            color: #f1f5f9;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .poster-tagline {
+            font-size: clamp(1rem, 2vw, 1.2rem);
+            color: #cbd5e1;
+            margin: 15px auto;
+            line-height: 1.4;
+            font-weight: 500;
+        }
+        
+        .highlight-text {
+            color: #60a5fa;
+            font-weight: 700;
+        }
+        
+        .services-container {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            flex-grow: 1;
+        }
+        
+        .service-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 20px;
+            border-left: 4px solid #3b82f6;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+        }
+        
+        .service-card:nth-child(2) {
+            border-left-color: #10b981;
+        }
+        
+        .service-card:nth-child(3) {
+            border-left-color: #8b5cf6;
+        }
+        
+        .service-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: clamp(1.2rem, 2.5vw, 1.5rem);
+            color: #f1f5f9;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .service-icon {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            flex-shrink: 0;
+        }
+        
+        .service-card:nth-child(2) .service-icon {
+            background: linear-gradient(135deg, #10b981, #34d399);
+        }
+        
+        .service-card:nth-child(3) .service-icon {
+            background: linear-gradient(135deg, #8b5cf6, #a78bfa);
+        }
+        
+        .service-features {
+            list-style-type: none;
+        }
+        
+        .service-features li {
+            margin-bottom: 10px;
+            font-size: clamp(0.85rem, 1.8vw, 1rem);
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            color: #e2e8f0;
+            line-height: 1.3;
+        }
+        
+        .service-features li i {
+            color: #60a5fa;
+            margin-top: 3px;
+            flex-shrink: 0;
+        }
+        
+        .contact-section {
+            margin-top: 30px;
+            padding-top: 25px;
+            border-top: 2px solid rgba(59, 130, 246, 0.4);
+            text-align: center;
+        }
+        
+        .contact-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: clamp(1.3rem, 2.5vw, 1.8rem);
+            color: #f1f5f9;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, #60a5fa, #a78bfa);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .contact-info {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .contact-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 10px;
+            min-width: 150px;
+            flex: 1;
+            max-width: 200px;
+        }
+        
+        .contact-icon {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+        
+        .contact-detail {
+            font-size: clamp(1.2rem, 2vw, 1.4rem);
+            font-weight: 700;
+            color: #f1f5f9;
+            margin-bottom: 5px;
+        }
+        
+        .contact-label {
+            font-size: clamp(0.9rem, 1.5vw, 1rem);
+            color: #cbd5e1;
+        }
+        
+        .qr-code {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(45deg, #1e293b, #334155);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 0.9rem;
+            border-radius: 10px;
+            margin: 15px auto;
+            padding: 10px;
+            text-align: center;
+            border: 2px solid rgba(59, 130, 246, 0.3);
+        }
+        
+        .qr-code i {
+            font-size: 35px;
+            margin-bottom: 8px;
+            color: #60a5fa;
+        }
+        
+        .footer-note {
+            font-size: clamp(0.9rem, 1.5vw, 1rem);
+            color: #cbd5e1;
+            text-align: center;
+            margin-top: 15px;
+            font-style: italic;
+            line-height: 1.3;
+        }
+        
+        .download-section {
+            text-align: center;
+            margin-top: 25px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(5px);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .download-section h3 {
+            font-family: 'Montserrat', sans-serif;
+            color: #f1f5f9;
+            margin-bottom: 15px;
+            font-size: clamp(1.3rem, 2.5vw, 1.6rem);
+            background: linear-gradient(to right, #60a5fa, #a78bfa);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .download-note {
+            color: #e2e8f0;
+            margin: 0 auto 15px;
+            line-height: 1.5;
+            font-size: clamp(0.9rem, 1.5vw, 1rem);
+        }
+        
+        #downloadMessage {
+            color: #60a5fa;
+            font-weight: 600;
+            margin-top: 15px;
+            font-size: clamp(0.9rem, 1.5vw, 1rem);
+            padding: 10px;
+            background: rgba(96, 165, 250, 0.1);
+            border-radius: 8px;
+            border-left: 3px solid #60a5fa;
+        }
+        
+        /* Scale poster for different sizes */
+        .poster-scale-0_8 {
+            transform: scale(0.8);
+            transform-origin: center top;
+        }
+        
+        .poster-scale-0_7 {
+            transform: scale(0.7);
+            transform-origin: center top;
+        }
+        
+        .poster-scale-0_6 {
+            transform: scale(0.6);
+            transform-origin: center top;
+        }
+        
+        .poster-scale-0_5 {
+            transform: scale(0.5);
+            transform-origin: center top;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 1200px) {
+            #poster {
+                transform: scale(0.9);
+                transform-origin: center top;
+            }
+        }
+        
+        @media (max-width: 992px) {
+            #poster {
+                transform: scale(0.8);
+                transform-origin: center top;
+            }
+            
+            .controls-panel {
+                flex-direction: column;
+            }
+            
+            .btn-group {
+                max-width: 100%;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            #poster {
+                transform: scale(0.7);
+                transform-origin: center top;
+            }
+            
+            .poster-content {
+                padding: 20px 25px;
+            }
+            
+            .contact-info {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .contact-item {
+                max-width: 250px;
+                width: 100%;
+            }
+            
+            .size-selector {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .size-btn {
+                flex: 0 0 calc(25% - 10px);
+            }
+        }
+        
+        @media (max-width: 576px) {
+            #poster {
+                transform: scale(0.6);
+                transform-origin: center top;
+            }
+            
+            .poster-content {
+                padding: 15px 20px;
+            }
+            
+            .header, .controls-panel, .preview-container, .download-section {
+                padding: 15px;
+            }
+            
+            .btn-group {
+                flex-direction: column;
+            }
+            
+            .action-btn {
+                width: 100%;
+            }
+            
+            .size-btn {
+                padding: 8px 12px;
+                font-size: 12px;
+                flex: 0 0 calc(50% - 5px);
+                margin-bottom: 5px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            #poster {
+                transform: scale(0.55);
+                transform-origin: center top;
+            }
+            
+            body {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Healthcare Solutions Poster</h1>
+            <p>Create and download a professional advertisement poster for your healthcare management solutions</p>
+        </div>
+        
+        <div class="controls-panel">
+            <div class="size-selector">
+                <span class="size-label">Size:</span>
+                <button class="size-btn" data-size="a5">A5</button>
+                <button class="size-btn active" data-size="a4">A4</button>
+                <button class="size-btn" data-size="a3">A3</button>
+                <button class="size-btn" data-size="a2">A2</button>
+            </div>
+            
+            <div class="btn-group">
+                <button class="action-btn" id="downloadPdfBtn">
+                    <i class="fas fa-file-pdf"></i> Download PDF
+                </button>
+                <button class="action-btn secondary" id="downloadImageBtn">
+                    <i class="fas fa-image"></i> Download Image
+                </button>
+            </div>
+        </div>
+        
+        <div class="preview-container">
+            <div id="poster">
+                <div class="poster-bg"></div>
+                <div class="poster-overlay"></div>
+                <div class="poster-content">
+                    <div class="poster-header">
+                        <h1 class="poster-title">Makokha Digital Healthcare Solutions</h1>
+                        <h2 class="poster-subtitle">For Clinics & Hospitals</h2>
+                        <p class="poster-tagline"><span class="highlight-text">Are you a clinic/hospital owner in need</span> of comprehensive digital solutions?</p>
+                    </div>
+                    
+                    <div class="services-container">
+                        <div class="service-card">
+                            <h3 class="service-title">
+                                <div class="service-icon">
+                                    <i class="fas fa-hospital-alt"></i>
+                                </div>
+                                Hospital Management System
+                            </h3>
+                            <ul class="service-features">
+                                <li><i class="fas fa-check"></i> Web-based or offline/desktop system</li>
+                                <li><i class="fas fa-check"></i> Manage pharmacy, outpatient & inpatient</li>
+                                <li><i class="fas fa-check"></i> User role-based access control</li>
+                                <li><i class="fas fa-check"></i> Real-time invoice, receipt & report generation</li>
+                                <li><i class="fas fa-check"></i> Integrated communication system</li>
+                                <li><i class="fas fa-check"></i> Customized to your preference</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="service-card">
+                            <h3 class="service-title">
+                                <div class="service-icon">
+                                    <i class="fas fa-laptop-code"></i>
+                                </div>
+                                Facility Website Solutions
+                            </h3>
+                            <ul class="service-features">
+                                <li><i class="fas fa-check"></i> Static website to display services</li>
+                                <li><i class="fas fa-check"></i> Advanced website with login & accounts</li>
+                                <li><i class="fas fa-check"></i> Appointment booking system</li>
+                                <li><i class="fas fa-check"></i> Responsive mobile-friendly design</li>
+                                <li><i class="fas fa-check"></i> SEO optimized for visibility</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="service-card">
+                            <h3 class="service-title">
+                                <div class="service-icon">
+                                    <i class="fas fa-video"></i>
+                                </div>
+                                Telemedicine Platform
+                            </h3>
+                            <ul class="service-features">
+                                <li><i class="fas fa-check"></i> Real-time video & voice consultations</li>
+                                <li><i class="fas fa-check"></i> Secure voice note consultations</li>
+                                <li><i class="fas fa-check"></i> Document upload functionality</li>
+                                <li><i class="fas fa-check"></i> Integrated secure payment system</li>
+                                <li><i class="fas fa-check"></i> Secure patient account creation</li>
+                                <li><i class="fas fa-check"></i> Patients data protection</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-section">
+                        <h3 class="contact-title">Contact Us Today!</h3>
+                        
+                        <div class="contact-info">
+                            <div class="contact-item">
+                                <div class="contact-icon">
+                                    <i class="fas fa-phone-alt"></i>
+                                </div>
+                                <div class="contact-detail">0741256531</div>
+                                <div class="contact-label">Call, SMS or DM</div>
+                            </div>
+                            
+                            <div class="contact-item">
+                                <div class="contact-icon">
+                                    <i class="fas fa-mobile-alt"></i>
+                                </div>
+                                <div class="contact-detail">0706010957</div>
+                                <div class="contact-label">Alternative Number</div>
+                            </div>
+                            
+                            <div class="contact-item">
+                                <div class="contact-icon">
+                                    <i class="fas fa-user-md"></i>
+                                </div>
+                                <div class="contact-detail">Makokha</div>
+                                <div class="contact-label">Contact Person</div>
+                            </div>
+                        </div>
+
+                        
+                        <p class="footer-note">Transform your healthcare facility with cutting-edge digital solutions designed for your needs.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="download-section">
+            <h3>Your Poster is Ready!</h3>
+            <p class="download-note">This professionally designed poster includes all your services and contact information. Download as PDF for printing or as an image for digital sharing.</p>
+            <p id="downloadMessage">Select your preferred format and click download.</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const poster = document.getElementById('poster');
+            const sizeButtons = document.querySelectorAll('.size-btn');
+            const downloadPdfBtn = document.getElementById('downloadPdfBtn');
+            const downloadImageBtn = document.getElementById('downloadImageBtn');
+            const downloadMessage = document.getElementById('downloadMessage');
+            
+            // Size selection
+            sizeButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remove active class from all buttons
+                    sizeButtons.forEach(btn => btn.classList.remove('active'));
+                    
+                    // Add active class to clicked button
+                    this.classList.add('active');
+                    
+                    // Get selected size
+                    const size = this.getAttribute('data-size');
+                    
+                    // Remove all scale classes
+                    poster.classList.remove('poster-scale-0_8', 'poster-scale-0_7', 'poster-scale-0_6', 'poster-scale-0_5');
+                    
+                    // Adjust poster dimensions and scale
+                    if (size === 'a5') {
+                        poster.style.width = '420px';
+                        poster.style.height = '595px';
+                        poster.classList.add('poster-scale-0_6');
+                        downloadMessage.textContent = 'Poster size set to A5 (21x15cm). Perfect for brochures and handouts.';
+                    } else if (size === 'a3') {
+                        poster.style.width = '842px';
+                        poster.style.height = '1191px';
+                        poster.classList.add('poster-scale-0_8');
+                        downloadMessage.textContent = 'Poster size set to A3 (42x30cm). Great for office displays.';
+                    } else if (size === 'a2') {
+                        poster.style.width = '1191px';
+                        poster.style.height = '1684px';
+                        poster.classList.add('poster-scale-0_6');
+                        downloadMessage.textContent = 'Poster size set to A2 (60x42cm). Ideal for large displays.';
+                    } else {
+                        // A4 (default)
+                        poster.style.width = '595px';
+                        poster.style.height = '842px';
+                        poster.classList.add('poster-scale-0_8');
+                        downloadMessage.textContent = 'Poster size set to A4 (30x21cm). Standard for printing.';
+                    }
+                });
+            });
+            
+            // Download as PDF
+            downloadPdfBtn.addEventListener('click', function() {
+                downloadMessage.textContent = 'Generating PDF... Please wait.';
+                
+                // Disable buttons during generation
+                downloadPdfBtn.disabled = true;
+                downloadImageBtn.disabled = true;
+                
+                // Temporarily remove scale for capture
+                const currentScale = poster.classList[0];
+                poster.classList.remove('poster-scale-0_8', 'poster-scale-0_7', 'poster-scale-0_6', 'poster-scale-0_5');
+                
+                // Use html2canvas to capture the poster
+                html2canvas(poster, {
+                    scale: 2,
+                    useCORS: true,
+                    logging: false,
+                    backgroundColor: '#0f172a'
+                }).then(canvas => {
+                    // Create PDF
+                    const { jsPDF } = window.jspdf;
+                    const pdf = new jsPDF({
+                        orientation: poster.clientHeight > poster.clientWidth ? 'portrait' : 'landscape',
+                        unit: 'px',
+                        format: [poster.clientWidth, poster.clientHeight]
+                    });
+                    
+                    // Convert canvas to image
+                    const imgData = canvas.toDataURL('image/jpeg', 0.95);
+                    
+                    // Calculate dimensions to fit PDF
+                    const pdfWidth = pdf.internal.pageSize.getWidth();
+                    const pdfHeight = pdf.internal.pageSize.getHeight();
+                    
+                    // Add image to PDF
+                    pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
+                    
+                    // Download PDF
+                    pdf.save('Healthcare-Solutions-Poster.pdf');
+                    
+                    downloadMessage.innerHTML = '<i class="fas fa-check-circle"></i> PDF downloaded successfully!';
+                    
+                    // Re-enable buttons and restore scale
+                    downloadPdfBtn.disabled = false;
+                    downloadImageBtn.disabled = false;
+                    if (currentScale) poster.classList.add(currentScale);
+                }).catch(error => {
+                    console.error('Error generating PDF:', error);
+                    downloadMessage.textContent = 'Error generating PDF. Please try again.';
+                    
+                    // Re-enable buttons and restore scale
+                    downloadPdfBtn.disabled = false;
+                    downloadImageBtn.disabled = false;
+                    if (currentScale) poster.classList.add(currentScale);
+                });
+            });
+            
+            // Download as Image
+            downloadImageBtn.addEventListener('click', function() {
+                downloadMessage.textContent = 'Generating image... Please wait.';
+                
+                // Disable buttons during generation
+                downloadPdfBtn.disabled = true;
+                downloadImageBtn.disabled = true;
+                
+                // Temporarily remove scale for capture
+                const currentScale = poster.classList[0];
+                poster.classList.remove('poster-scale-0_8', 'poster-scale-0_7', 'poster-scale-0_6', 'poster-scale-0_5');
+                
+                // Use html2canvas to capture the poster
+                html2canvas(poster, {
+                    scale: 2,
+                    useCORS: true,
+                    logging: false,
+                    backgroundColor: '#0f172a'
+                }).then(canvas => {
+                    // Convert canvas to image and trigger download
+                    const link = document.createElement('a');
+                    link.download = 'Healthcare-Solutions-Poster.jpg';
+                    link.href = canvas.toDataURL('image/jpeg', 0.95);
+                    link.click();
+                    
+                    downloadMessage.innerHTML = '<i class="fas fa-check-circle"></i> Image downloaded successfully!';
+                    
+                    // Re-enable buttons and restore scale
+                    downloadPdfBtn.disabled = false;
+                    downloadImageBtn.disabled = false;
+                    if (currentScale) poster.classList.add(currentScale);
+                }).catch(error => {
+                    console.error('Error generating image:', error);
+                    downloadMessage.textContent = 'Error generating image. Please try again.';
+                    
+                    // Re-enable buttons and restore scale
+                    downloadPdfBtn.disabled = false;
+                    downloadImageBtn.disabled = false;
+                    if (currentScale) poster.classList.add(currentScale);
+                });
+            });
+            
+            // Initialize with A4 size
+            downloadMessage.textContent = 'Poster ready! Select size and download format.';
+        });
+    </script>
+</body>
+</html>

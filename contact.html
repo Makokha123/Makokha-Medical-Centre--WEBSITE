@@ -1,0 +1,1296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Contact Us - Makokha Medical Centre</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Contact Makokha Medical Centre for appointments, inquiries, or emergency assistance. Find our location, phone numbers, and operating hours.">
+    <meta name="keywords" content="contact Makokha Medical, appointment, emergency contact, location, phone number">
+    
+    <!-- Open Graph Tags -->
+    <meta property="og:title" content="Contact Makokha Medical Centre">
+    <meta property="og:description" content="Get in touch with us for appointments, inquiries, or emergency assistance">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1582750433449-648ed127bb54?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    
+    <!-- Global Styles -->
+    <link rel="stylesheet" href="styles/main.css">
+    
+    <style>
+        :root {
+            --primary-color: #1a73e8;
+            --secondary-color: #34a853;
+            --accent-color: #fbbc05;
+            --dark-color: #2c3e50;
+            --light-color: #f8f9fa;
+            --text-color: #333;
+            --text-light: #666;
+            --white: #ffffff;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+            --border-radius: 8px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--light-color);
+            overflow-x: hidden;
+        }
+        
+        h1, h2, h3, h4, h5 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            line-height: 1.3;
+            margin-bottom: 1rem;
+        }
+        
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: var(--transition);
+        }
+        
+        ul {
+            list-style: none;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header Styles */
+        .header {
+            background: var(--white);
+            box-shadow: var(--shadow);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo-icon {
+            color: var(--primary-color);
+            font-size: 2rem;
+        }
+        
+        .logo-text {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--dark-color);
+        }
+        
+        .logo-text span {
+            color: var(--primary-color);
+        }
+        
+        .nav-menu {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .nav-link {
+            font-weight: 500;
+            padding: 0.5rem 0;
+            position: relative;
+        }
+        
+        .nav-link:hover {
+            color: var(--primary-color);
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-color);
+            transition: var(--transition);
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--dark-color);
+        }
+        
+        /* Mobile Navigation */
+        .mobile-nav {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 280px;
+            height: 100vh;
+            background: var(--white);
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            z-index: 1001;
+            transition: var(--transition);
+        }
+        
+        .mobile-nav.active {
+            right: 0;
+        }
+        
+        .mobile-nav-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .close-menu {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--dark-color);
+        }
+        
+        .mobile-nav-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .mobile-nav-link {
+            padding: 0.8rem 0;
+            border-bottom: 1px solid #eee;
+            font-weight: 500;
+        }
+        
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+        
+        .overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        /* Footer Styles */
+        .footer {
+            background: var(--dark-color);
+            color: var(--white);
+            padding: 3rem 0 1.5rem;
+            margin-top: auto;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-section h3 {
+            color: var(--white);
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+        }
+        
+        .footer-section p {
+            color: #ccc;
+            margin-bottom: 1rem;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .social-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+        
+        .social-link:hover {
+            background: var(--primary-color);
+            transform: translateY(-3px);
+        }
+        
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+        
+        .footer-link {
+            color: #ccc;
+            transition: var(--transition);
+        }
+        
+        .footer-link:hover {
+            color: var(--primary-color);
+            padding-left: 5px;
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+        
+        /* Contact Page Specific Styles */
+        /* Contact Hero */
+        .contact-hero {
+            background: linear-gradient(rgba(44, 62, 80, 0.9), rgba(44, 62, 80, 0.9)), url('https://images.unsplash.com/photo-1582750433449-648ed127bb54?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80');
+            background-size: cover;
+            background-position: center;
+            color: var(--white);
+            padding: 8rem 0 4rem;
+            text-align: center;
+            margin-top: 60px;
+        }
+        
+        .contact-hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        /* Contact Section */
+        .contact-section {
+            padding: 5rem 0;
+            background: var(--white);
+        }
+        
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+        }
+        
+        .contact-info h2,
+        .contact-form h2 {
+            font-size: 2.5rem;
+            color: var(--dark-color);
+            margin-bottom: 1.5rem;
+        }
+        
+        .contact-info p {
+            color: var(--text-light);
+            margin-bottom: 2rem;
+            line-height: 1.8;
+        }
+        
+        /* Contact Cards */
+        .contact-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .contact-card {
+            display: flex;
+            align-items: flex-start;
+            gap: 1.5rem;
+            padding: 1.5rem;
+            background: var(--light-color);
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+        }
+        
+        .contact-card:hover {
+            background: rgba(26, 115, 232, 0.05);
+            transform: translateX(10px);
+        }
+        
+        .contact-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--primary-color);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+        
+        .contact-details h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--dark-color);
+        }
+        
+        .contact-details p {
+            color: var(--text-light);
+            margin: 0;
+        }
+        
+        /* Contact Form */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--dark-color);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: var(--border-radius);
+            font-family: 'Roboto', sans-serif;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.1);
+        }
+        
+        textarea.form-control {
+            min-height: 150px;
+            resize: vertical;
+        }
+        
+        .submit-btn {
+            background: var(--primary-color);
+            color: var(--white);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .submit-btn:hover {
+            background: #0d62d9;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(26, 115, 232, 0.2);
+        }
+        
+        /* Map Section */
+        .map-section {
+            padding: 0 0 5rem;
+            background: var(--light-color);
+        }
+        
+        .map-container {
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            height: 400px;
+        }
+        
+        /* Operating Hours */
+        .hours-section {
+            padding: 5rem 0;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: var(--white);
+        }
+        
+        .hours-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .hours-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: var(--transition);
+        }
+        
+        .hours-card:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-5px);
+        }
+        
+        .hours-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--accent-color);
+        }
+        
+        .hours-list {
+            margin-top: 1rem;
+        }
+        
+        .hour-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .hour-item:last-child {
+            border-bottom: none;
+        }
+        
+        .day {
+            font-weight: 500;
+        }
+        
+        .time {
+            opacity: 0.9;
+        }
+        
+        /* Emergency Contact */
+        .emergency-contact {
+            padding: 4rem 0;
+            background: linear-gradient(135deg, #ff4444, #ff6b6b);
+            color: var(--white);
+            text-align: center;
+        }
+        
+        .emergency-contact h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .emergency-numbers {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+        
+        .emergency-number {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .emergency-number .icon {
+            font-size: 2rem;
+        }
+        
+        .emergency-number .number {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        /* Social Media Contact */
+        .social-contact-section {
+            padding: 5rem 0;
+            background: var(--white);
+        }
+        
+        .social-contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .social-contact-card {
+            text-align: center;
+            padding: 2rem;
+            background: var(--light-color);
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+        }
+        
+        .social-contact-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow);
+        }
+        
+        .social-contact-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2rem;
+        }
+        
+        .social-contact-card.facebook .social-contact-icon {
+            background: linear-gradient(45deg, #1877f2, #0d65c2);
+        }
+        
+        .social-contact-card.whatsapp .social-contact-icon {
+            background: linear-gradient(45deg, #25d366, #128c7e);
+        }
+        
+        .social-contact-card.email .social-contact-icon {
+            background: linear-gradient(45deg, #ea4335, #d14836);
+        }
+        
+        .social-contact-cta {
+            margin-top: 1rem;
+        }
+        
+        .social-contact-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0.8rem 1.5rem;
+            background: var(--primary-color);
+            color: var(--white);
+            border-radius: var(--border-radius);
+            font-weight: 500;
+            transition: var(--transition);
+        }
+        
+        .social-contact-btn:hover {
+            background: #0d62d9;
+            transform: translateY(-2px);
+        }
+        
+        /* Appointment Section */
+        .appointment-section {
+            padding: 5rem 0;
+            background: var(--light-color);
+        }
+        
+        .appointment-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .appointment-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+        
+        .appointment-step {
+            padding: 1.5rem;
+            background: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+        
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-color);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-weight: 600;
+        }
+        
+        /* Section Title */
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: var(--dark-color);
+            position: relative;
+            display: inline-block;
+            padding-bottom: 1rem;
+        }
+        
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--primary-color);
+            border-radius: 2px;
+        }
+        
+        .section-title p {
+            color: var(--text-light);
+            max-width: 600px;
+            margin: 1rem auto 0;
+        }
+        
+        .white-title h2 {
+            color: var(--white);
+        }
+        
+        .white-title h2::after {
+            background: var(--accent-color);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .container {
+                padding: 0 15px;
+            }
+            
+            .contact-grid {
+                gap: 3rem;
+            }
+            
+            .contact-hero h1 {
+                font-size: 2.5rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .logo-text {
+                font-size: 1.3rem;
+            }
+            
+            .contact-hero {
+                padding: 7rem 0 3rem;
+            }
+            
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .emergency-numbers {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+            
+            .map-container {
+                height: 300px;
+            }
+            
+            .hours-section,
+            .contact-section {
+                padding: 3rem 0;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .header-container {
+                padding: 0.8rem 0;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .contact-hero h1 {
+                font-size: 2rem;
+            }
+            
+            .contact-info h2,
+            .contact-form h2 {
+                font-size: 2rem;
+            }
+            
+            .contact-card {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .contact-icon {
+                margin: 0 auto;
+            }
+            
+            .submit-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .social-contact-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .appointment-steps {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container header-container">
+            <a href="index.html" class="logo">
+                <img src="images/logo.png" alt="Makokha Medical Centre Logo" class="logo-image">
+                <div class="logo-text">Makokha <span>Medical Centre</span></div>
+            </a>
+                        
+            <nav class="nav">
+                <ul class="nav-menu">
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="about.html" class="nav-link">About</a></li>
+                    <li><a href="services.html" class="nav-link">Services</a></li>
+                    <li><a href="contact.html" class="nav-link active">Contact</a></li>
+                </ul>
+                <button class="mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </nav>
+        </div>
+        
+        <!-- Mobile Navigation -->
+        <div class="mobile-nav">
+            <div class="mobile-nav-header">
+                <h3>Menu</h3>
+                <button class="close-menu">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <ul class="mobile-nav-menu">
+                <li><a href="index.html" class="mobile-nav-link">Home</a></li>
+                <li><a href="about.html" class="mobile-nav-link">About</a></li>
+                <li><a href="services.html" class="mobile-nav-link">Services</a></li>
+                <li><a href="contact.html" class="mobile-nav-link active">Contact</a></li>
+            </ul>
+        </div>
+        
+        <div class="overlay"></div>
+    </header>
+
+    <main>
+        <!-- Contact Hero -->
+        <section class="contact-hero">
+            <div class="container">
+                <h1>Contact Makokha Medical Centre</h1>
+                <p>Get in touch with us for appointments, inquiries, or emergency assistance</p>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section class="contact-section" id="contact-form">
+            <div class="container">
+                <div class="contact-grid">
+                    <div class="contact-info">
+                        <h2>Get In Touch</h2>
+                        <p>We're here to help you with all your healthcare needs. Reach out to us through any of the following channels, and our team will be happy to assist you.</p>
+                        
+                        <div class="contact-cards">
+                            <div class="contact-card">
+                                <div class="contact-icon">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </div>
+                                <div class="contact-details">
+                                    <h3>Our Location</h3>
+                                    <p>Maliki Market, Along Kitale Webuye Highway<br>opposite Kitale Stage<br>P.O. Box 142, Kimilili</p>
+                                </div>
+                            </div>
+                            
+                            <div class="contact-card">
+                                <div class="contact-icon">
+                                    <i class="fas fa-phone-alt"></i>
+                                </div>
+                                <div class="contact-details">
+                                    <h3>Phone Numbers</h3>
+                                    <p>General Inquiries: +254 713580997<br>Emergency: +254 741256531<br>Appointments: +254 713580997</p>
+                                </div>
+                            </div>
+                            
+                            <div class="contact-card">
+                                <div class="contact-icon">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <div class="contact-details">
+                                    <h3>Email Address</h3>
+                                    <p>General: info@makokhamedical.com<br>Appointments: appointments@makokhamedical.com<br>Emergency: emergency@makokhamedical.com</p>
+                                    <p>coming soon: the appointments will be booked via telemedicine website</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-form">
+                        <h2>Send Message</h2>
+                        <form id="contactForm">
+                            <div class="form-group">
+                                <label for="name" class="form-label">Full Name *</label>
+                                <input type="text" id="name" class="form-control" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="email" class="form-label">Email Address *</label>
+                                <input type="email" id="email" class="form-control" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="phone" class="form-label">Phone Number</label>
+                                <input type="tel" id="phone" class="form-control">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="subject" class="form-label">Subject *</label>
+                                <select id="subject" class="form-control" required>
+                                    <option value="">Select a subject</option>
+                                    <option value="appointment">Book Appointment</option>
+                                    <option value="general">General Inquiry</option>
+                                    <option value="emergency">Emergency Contact</option>
+                                    <option value="feedback">Feedback/Suggestion</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="message" class="form-label">Message *</label>
+                                <textarea id="message" class="form-control" required></textarea>
+                            </div>
+                            
+                            <button type="submit" class="submit-btn">
+                                <i class="fas fa-paper-plane"></i> Send Message
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Social Media Contact -->
+        <section class="social-contact-section">
+            <div class="container">
+                <div class="section-title">
+                    <h2>Connect on Social Media</h2>
+                    <p>Follow us for health tips, updates, and community events</p>
+                </div>
+                
+                <div class="social-contact-grid">
+                    <div class="social-contact-card facebook">
+                        <div class="social-contact-icon">
+                            <i class="fab fa-facebook-messenger"></i>
+                        </div>
+                        <h3>Facebook Messenger</h3>
+                        <p>Quick chat and inquiries through Messenger</p>
+                        <div class="social-contact-cta">
+                            <a href="https://m.me/makokhamedical" target="_blank" class="social-contact-btn">
+                                <i class="fab fa-facebook-messenger"></i> Message Us
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="social-contact-card whatsapp">
+                        <div class="social-contact-icon">
+                            <i class="fab fa-whatsapp"></i>
+                        </div>
+                        <h3>WhatsApp</h3>
+                        <p>Text us on WhatsApp for quick responses</p>
+                        <div class="social-contact-cta">
+                            <a href="https://wa.me/254713580997" target="_blank" class="social-contact-btn">
+                                <i class="fab fa-whatsapp"></i> Chat on WhatsApp
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="social-contact-card email">
+                        <div class="social-contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <h3>Email</h3>
+                        <p>Send us an email for detailed inquiries</p>
+                        <div class="social-contact-cta">
+                            <a href="mailto:info@makokhamedical.com" class="social-contact-btn">
+                                <i class="fas fa-envelope"></i> Send Email
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Map Section -->
+        <section class="map-section">
+            <div class="container">
+                <div class="section-title">
+                    <h2>Find Our Location</h2>
+                    <p>Visit us at our conveniently located medical centre in Maliki Town</p>
+                </div>
+                
+                <div class="map-container">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3989.755404043783!2d34.8547!3d-0.702!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMMKwNDInMDcuMiJTIDM0wrA1MScxNi45IkU!5e0!3m2!1sen!2ske!4v1622549401234!5m2!1sen!2ske" 
+                        width="100%" 
+                        height="100%" 
+                        style="border:0;" 
+                        allowfullscreen="" 
+                        loading="lazy"
+                        title="Makokha Medical Centre Location">
+                    </iframe>
+                </div>
+                
+                <div style="text-align: center; margin-top: 2rem;">
+                    <a href="https://maps.google.com/?q=Makokha+Medical+Centre+Maliki+Town" target="_blank" class="submit-btn">
+                        <i class="fas fa-directions"></i> Get Directions
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Appointment Section -->
+        <section class="appointment-section">
+            <div class="container">
+                <div class="appointment-content">
+                    <div class="section-title">
+                        <h2>Book an Appointment</h2>
+                        <p>Easy steps to schedule your visit</p>
+                    </div>
+                    
+                    <div class="appointment-steps">
+                        <div class="appointment-step">
+                            <div class="step-number">1</div>
+                            <h3>Call or Message</h3>
+                            <p>Contact us via phone, WhatsApp, or fill the contact form</p>
+                        </div>
+                        
+                        <div class="appointment-step">
+                            <div class="step-number">2</div>
+                            <h3>Choose Date & Time</h3>
+                            <p>Select a convenient appointment slot</p>
+                        </div>
+                        
+                        <div class="appointment-step">
+                            <div class="step-number">3</div>
+                            <h3>Confirm Appointment</h3>
+                            <p>Receive confirmation via SMS or email</p>
+                        </div>
+                        
+                        <div class="appointment-step">
+                            <div class="step-number">4</div>
+                            <h3>Visit Our Centre</h3>
+                            <p>Arrive 15 minutes early for your appointment</p>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 3rem;">
+                        <a href="#contact-form" class="submit-btn" style="margin-right: 1rem;">
+                            <i class="fas fa-calendar-check"></i> Book Online
+                        </a>
+                        <a href="tel:+254723456789" class="submit-btn" style="background: var(--secondary-color);">
+                            <i class="fas fa-phone-alt"></i> Call to Book
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Operating Hours -->
+        <section class="hours-section">
+            <div class="container">
+                <div class="section-title white-title">
+                    <h2>Operating Hours</h2>
+                    <p>We're here for you around the clock</p>
+                </div>
+                
+                <div class="hours-grid">
+                    <div class="hours-card">
+                        <div class="hours-icon">
+                            <i class="fas fa-hospital"></i>
+                        </div>
+                        <h3>Outpatient Services</h3>
+                        <div class="hours-list">
+                            <div class="hour-item">
+                                <span class="day">Monday - Friday</span>
+                                <span class="time">7:30 AM - 7:00 PM</span>
+                            </div>
+                            <div class="hour-item">
+                                <span class="day">Saturday</span>
+                                <span class="time">8:30 AM - 6:00 PM</span>
+                            </div>
+                            <div class="hour-item">
+                                <span class="day">Sunday</span>
+                                <span class="time">8:30 AM - 6:00 PM</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="hours-card">
+                        <div class="hours-icon">
+                            <i class="fas fa-ambulance"></i>
+                        </div>
+                        <h3>Emergency Services</h3>
+                        <div class="hours-list">
+                            <div class="hour-item">
+                                <span class="day">24 Hours</span>
+                                <span class="time">7 Days a Week</span>
+                            </div>
+                            <div class="hour-item">
+                                <span class="day">Emergency Contact</span>
+                                <span class="time">+254 713 580997</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="hours-card">
+                        <div class="hours-icon">
+                            <i class="fas fa-stethoscope"></i>
+                        </div>
+                        <h3>Specialist Consultation</h3>
+                        <div class="hours-list">
+                            <div class="hour-item">
+                                <span class="day">By Appointment</span>
+                                <span class="time">Monday - Friday</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Emergency Contact -->
+        <section class="emergency-contact" id="emergency">
+            <div class="container">
+                <h2>Emergency Contact</h2>
+                <p>For immediate medical assistance, call our emergency numbers</p>
+                
+                <div class="emergency-numbers">
+                    <div class="emergency-number">
+                        <div class="icon">
+                            <i class="fas fa-phone-alt"></i>
+                        </div>
+                        <div class="number">+254 713 580 997</div>
+                        <div class="label">Emergency Hotline</div>
+                    </div>
+                
+                <p style="margin-top: 2rem; opacity: 0.9;">
+                    <i class="fas fa-exclamation-triangle"></i> In case of emergency, please proceed directly to our facility or call for Emergency assistance.
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Makokha Medical Centre</h3>
+                    <p>Providing quality healthcare services to the Maliki community for 1+ years. Your health is our priority.</p>
+                    <div class="social-links">
+                        <a href="https://facebook.com/makokhamedical" target="_blank" class="social-link" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://twitter.com/makokhamedical" target="_blank" class="social-link" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="https://instagram.com/makokhamedical" target="_blank" class="social-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="https://youtube.com/makokhamedical" target="_blank" class="social-link" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                        <a href="https://linkedin.com/company/makokhamedical" target="_blank" class="social-link" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html" class="footer-link">Home</a></li>
+                        <li><a href="about.html" class="footer-link">About Us</a></li>
+                        <li><a href="services.html" class="footer-link">Our Services</a></li>
+                        <li><a href="contact.html" class="footer-link">Contact</a></li>
+                        <li><a href="services.html#telemedicine" class="footer-link">Telemedicine</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Contact Info</h3>
+                    <p><i class="fas fa-map-marker-alt"></i> Maliki Market, Along Kitale Webuye Highway, opposite Kitale stage</p>
+                    <p><i class="fas fa-phone"></i> +254 741256531/ +254 713580997</p>
+                    <p><i class="fas fa-envelope"></i> info@makokhamedical.com</p>
+                    <p><i class="fas fa-clock"></i> Mon-Sun: 24/7 Emergency</p>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; <span id="current-year">2025</span> Makokha Medical Centre. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Global Scripts -->
+    <script src="scripts/main.js"></script>
+    
+    <script>
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const mobileNav = document.querySelector('.mobile-nav');
+        const closeMenu = document.querySelector('.close-menu');
+        const overlay = document.querySelector('.overlay');
+        const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+        
+        function toggleMobileMenu() {
+            mobileNav.classList.toggle('active');
+            overlay.classList.toggle('active');
+            document.body.style.overflow = mobileNav.classList.contains('active') ? 'hidden' : '';
+        }
+        
+        mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+        closeMenu.addEventListener('click', toggleMobileMenu);
+        overlay.addEventListener('click', toggleMobileMenu);
+        
+        // Close mobile menu when clicking on links
+        mobileNavLinks.forEach(link => {
+            link.addEventListener('click', toggleMobileMenu);
+        });
+        
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('.header');
+            if (window.scrollY > 100) {
+                header.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.1)';
+            } else {
+                header.style.boxShadow = 'var(--shadow)';
+            }
+        });
+        
+        // Contact Form Submission
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form values
+            const formData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                subject: document.getElementById('subject').value,
+                message: document.getElementById('message').value
+            };
+            
+            // Basic validation
+            if (!formData.name || !formData.email || !formData.subject || !formData.message) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+            
+            // In a real application, you would send this data to a server
+            // For demo purposes, we'll just show a success message
+            const submitBtn = this.querySelector('.submit-btn');
+            const originalText = submitBtn.innerHTML;
+            
+            // Show loading state
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+            submitBtn.disabled = true;
+            
+            // Simulate API call
+            setTimeout(() => {
+                // Show success message
+                alert(`Thank you ${formData.name}! Your message has been sent. We will get back to you shortly at ${formData.email}.`);
+                
+                // Reset form
+                this.reset();
+                
+                // Reset button
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }, 1500);
+        });
+        
+        // Phone number formatting
+        const phoneInputs = document.querySelectorAll('input[type="tel"]');
+        phoneInputs.forEach(input => {
+            input.addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                
+                if (value.length > 0) {
+                    if (value.length <= 3) {
+                        value = '+' + value;
+                    } else if (value.length <= 6) {
+                        value = '+' + value.slice(0, 3) + ' ' + value.slice(3);
+                    } else if (value.length <= 9) {
+                        value = '+' + value.slice(0, 3) + ' ' + value.slice(3, 6) + ' ' + value.slice(6);
+                    } else {
+                        value = '+' + value.slice(0, 3) + ' ' + value.slice(3, 6) + ' ' + value.slice(6, 9) + ' ' + value.slice(9, 12);
+                    }
+                }
+                
+                e.target.value = value;
+            });
+        });
+        
+        // Current year in footer
+        document.addEventListener('DOMContentLoaded', () => {
+            const yearSpan = document.querySelector('#current-year');
+            if (yearSpan) {
+                yearSpan.textContent = new Date().getFullYear();
+            }
+            
+            // Highlight active nav link
+            const currentPage = window.location.pathname.split('/').pop();
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                if (link.getAttribute('href') === currentPage) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
