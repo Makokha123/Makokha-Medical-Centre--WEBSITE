@@ -1542,8 +1542,9 @@ def _ensure_communication_schema():
         return
 
     inspector = inspect(db.engine)
-    if 'communication' not in inspector.get_table_names():
-        COMMUNICATION_SCHEMA_READY = True
+    table_names = set(inspector.get_table_names())
+    if 'communication' not in table_names:
+        # Base schema is not ready yet; retry on a later request.
         return
 
     existing_columns = {column['name'] for column in inspector.get_columns('communication')}
@@ -1573,7 +1574,11 @@ def _ensure_communication_thread_table():
         return
 
     inspector = inspect(db.engine)
-    if 'communication_message' not in inspector.get_table_names():
+    table_names = set(inspector.get_table_names())
+    if 'communication' not in table_names:
+        # Parent table has not been created yet.
+        return
+    if 'communication_message' not in table_names:
         CommunicationMessage.__table__.create(db.engine, checkfirst=True)
     COMMUNICATION_THREAD_TABLE_READY = True
 
