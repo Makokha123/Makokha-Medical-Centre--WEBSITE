@@ -12,6 +12,7 @@ import os
 import re
 import json
 import importlib
+import threading
 from uuid import uuid4
 from sqlalchemy import desc, inspect, text, or_
 from urllib.parse import urlparse
@@ -289,6 +290,8 @@ DOCTOR_SCHEMA_READY = False
 COMMUNICATION_SCHEMA_READY = False
 COMMUNICATION_THREAD_TABLE_READY = False
 SITE_SETTINGS_TABLE_READY = False
+RUNTIME_SCHEMA_READY = False
+RUNTIME_SCHEMA_LOCK = threading.Lock()
 
 # ==================== DATABASE MODELS ====================
 
@@ -1699,11 +1702,32 @@ def _send_plain_email(recipient_email, subject, plain_text):
         return False, str(exc)
 
 
+def _ensure_runtime_schema_once():
+    """Create all core tables and lightweight schema updates once per worker process."""
+    global RUNTIME_SCHEMA_READY
+    if RUNTIME_SCHEMA_READY:
+        return
+
+    with RUNTIME_SCHEMA_LOCK:
+        if RUNTIME_SCHEMA_READY:
+            return
+
+        db.create_all()
+        _ensure_founder_table()
+        _ensure_partner_table()
+        _ensure_doctor_schema()
+        _ensure_communication_schema()
+        _ensure_communication_thread_table()
+        ensure_runtime_schema()
+        ensure_event_schema()
+        ensure_site_settings()
+        RUNTIME_SCHEMA_READY = True
+
+
 @app.before_request
 def ensure_message_runtime_schema():
-    """Keep lightweight schema upgrades compatible across old DB files."""
-    _ensure_communication_schema()
-    _ensure_communication_thread_table()
+    """Ensure runtime schema exists before request handlers query tables."""
+    _ensure_runtime_schema_once()
 
 
 @app.before_request
@@ -5122,9 +5146,16 @@ def _init_db_if_enabled_once():
     if _DB_BOOTSTRAPPED:
         return
     if not _env_flag('AUTO_INIT_DB', True):
+        _DB_BOOTSTRAPPED = True
         return
-    init_db()
-    _DB_BOOTSTRAPPED = True
+    try:
+        init_db()
+    except Exception:
+        app.logger.exception(
+            'Startup database initialization failed; requests will retry schema bootstrap lazily.'
+        )
+    finally:
+        _DB_BOOTSTRAPPED = True
 
 
 # Ensure schemas are created under WSGI servers (e.g., Gunicorn), where
